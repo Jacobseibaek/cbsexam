@@ -9,26 +9,37 @@ import java.io.InputStreamReader;
 
 public final class Config {
 
+  //DB-Connection
   private static String DATABASE_HOST;
   private static int DATABASE_PORT;
   private static String DATABASE_USERNAME;
   private static String DATABASE_PASSWORD;
   private static String DATABASE_NAME;
+  //Encryption
   private static boolean ENCRYPTION;
+  //SOLR
   private static String SOLR_HOST;
   private static int SOLR_PORT;
   private static String SOLR_PATH;
   private static String SOLR_CORE;
+  //TTLs
   private static long PRODUCT_TTL;
   private static long ORDER_TTL;
+  private static long USER_TTL;
 
 
   public static long getProductTtl() {
     return PRODUCT_TTL;
   }
 
+  //adding a ORDER_TTL that makes it usable in the OrderCache
   public static long getOrderTtl(){
     return ORDER_TTL;
+  }
+
+  //adding a USER_TTL that makes it usable in the UserCache
+  public static long getUserTtl(){
+    return USER_TTL;
   }
 
   public static String getDatabaseHost() {
@@ -106,5 +117,6 @@ public final class Config {
     SOLR_CORE = json.get("SOLR_CORE").toString().replace("\"", "");
     PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
     ORDER_TTL = json.get("ORDER_TTL").getAsLong();
+    USER_TTL = json.get("USER_TTL").getAsLong();
   }
 }
