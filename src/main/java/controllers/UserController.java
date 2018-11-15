@@ -95,6 +95,8 @@ public class UserController {
     return users;
   }
 
+  public static Hashing hashing = new Hashing();
+
   public static User createUser(User user) {
 
     // Write in log that we've reach this step
@@ -117,7 +119,8 @@ public class UserController {
             + user.getLastname()
             + "', '"
                 //Hashing the user password by a SHA (Secure Hash Algorithm) so the password can't be reversed.
-            + Hashing.sha(user.getPassword())
+                //getPassword is also salted
+            + hashing.saltingSha(user.getPassword())
             + "', '"
             + user.getEmail()
             + "', "

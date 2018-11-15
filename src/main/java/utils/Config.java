@@ -26,6 +26,12 @@ public final class Config {
   private static long PRODUCT_TTL;
   private static long ORDER_TTL;
   private static long USER_TTL;
+  //Salting
+  private static String SALT_KEY;
+  //Return of Salt_key
+  public static String getSaltKey(){
+    return SALT_KEY;
+  }
 
   public static long getProductTtl() {
     return PRODUCT_TTL;
@@ -117,5 +123,6 @@ public final class Config {
     PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
     ORDER_TTL = json.get("ORDER_TTL").getAsLong();
     USER_TTL = json.get("USER_TTL").getAsLong();
+    SALT_KEY = json.get("SALT_KEY").getAsString();
   }
 }
