@@ -44,7 +44,9 @@ public class UserEndpoints {
   //Using the UserCache
   private static UserCache userCache = new UserCache();
 
-  /** @return Responses */
+  /**
+   * @return Responses
+   */
   @GET
   @Path("/")
   public Response getUsers() {
@@ -124,10 +126,24 @@ public class UserEndpoints {
     }
   }
 
-  // TODO: Make the system able to update users
-  public Response updateUser(String x) {
+  // TODO: Make the system able to update users (FIX)
+  @POST
+  @Path("/update")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response updateUser(String body) {
 
-    // Return a response with status 200 and JSON as type
-    return Response.status(400).entity("Endpoint not implemented yet").build();
+    User user = new Gson().fromJson(body, User.class);
+
+
+    if (UserController.updateUser(user, user.getToken())) {
+      UserCache userCache = new UserCache();
+      userCache.getUsers(true);
+
+      // Return a response with status 200 and JSON as type
+      return Response.status(200).entity("User updated").build();
+    } else {
+      return Response.status(400).entity("Could not update user").build();
+    }
   }
 }
+

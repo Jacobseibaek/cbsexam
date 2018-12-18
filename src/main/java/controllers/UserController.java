@@ -145,6 +145,36 @@ public class UserController {
     return user;
   }
 
+  public static boolean updateUser(User user, String token) {
+
+    DecodedJWT jwt = null;
+
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+    try {
+      Algorithm algorithm = Algorithm.HMAC256("secret");
+      JWTVerifier verifier = JWT.require(algorithm)
+              .withIssuer("auth0")
+              .build();
+      jwt = verifier.verify(token);
+    } catch (JWTCreationException e) {
+      System.out.println(e.getMessage());
+    }
+    boolean succes = dbCon.update("UPDATE user SET first_name = '" + user.getFirstname()
+            + "', last_name ='" + user.getLastname()
+            + "', password ='" + hashing.saltingSha(user.getPassword())
+            + "', email ='" + user.getEmail()
+            + "' WHERE id ='" + jwt.getClaim("userid").asInt());
+    {
+      if (succes) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   public static String loginUser(User user) {
 
     String token = null;
