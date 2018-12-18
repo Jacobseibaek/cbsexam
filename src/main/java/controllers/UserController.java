@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import model.User;
 import org.apache.solr.common.util.Hash;
 import utils.Hashing;
@@ -189,5 +191,31 @@ public class UserController {
       System.out.println(ex.getMessage());
     }
   return null;
+}
+public static boolean deleteUser(String token) {
+
+  DecodedJWT jwt = null;
+  Log.writeLog(UserController.class.getName(), "", "Delete user", 0);
+
+  if (dbCon == null) {
+    dbCon = new DatabaseController();
+  }
+  try {
+    Algorithm algorithm = Algorithm.HMAC256("secret");
+    JWTVerifier verifier = JWT.require(algorithm)
+            .withIssuer("auth0")
+            .build();
+    jwt = verifier.verify(token);
+  } catch (JWTCreationException e) {
+    System.out.println(e.getMessage());
+  }
+  boolean succes = dbCon.update("DELETE FROM user WHERE id=" + jwt.getClaim("userid"));
+  {
+    if (succes) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 }

@@ -25,13 +25,13 @@ public class DatabaseController {
     try {
       // Set the dataabase connect with the data from the config
       String url =
-          "jdbc:mysql://"
-              + Config.getDatabaseHost()
-              + ":"
-              + Config.getDatabasePort()
-              + "/"
-              + Config.getDatabaseName()
-              + "?serverTimezone=CET";
+              "jdbc:mysql://"
+                      + Config.getDatabaseHost()
+                      + ":"
+                      + Config.getDatabasePort()
+                      + "/"
+                      + Config.getDatabaseName()
+                      + "?serverTimezone=CET";
 
       String user = Config.getDatabaseUsername();
       String password = Config.getDatabasePassword();
@@ -48,6 +48,28 @@ public class DatabaseController {
 
     return connection;
   }
+
+  public boolean update(String sql) {
+
+
+    int rowsAffected;
+    if (connection == null)
+      connection = getConnection();
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+      rowsAffected = preparedStatement.executeUpdate();
+
+      if (rowsAffected == 1) {
+        return true;
+      }
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return false;
+  }
+
+
 
   /**
    * Do a query in the database
@@ -110,4 +132,5 @@ public class DatabaseController {
     // Return the resultset which at this point will be null
     return result;
   }
+
 }
