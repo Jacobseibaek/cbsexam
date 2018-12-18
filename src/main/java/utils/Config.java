@@ -17,6 +17,7 @@ public final class Config {
   private static String DATABASE_NAME;
   //Encryption
   private static boolean ENCRYPTION;
+  private static String ENCRYPTION_KEY;
   //SOLR
   private static String SOLR_HOST;
   private static int SOLR_PORT;
@@ -45,6 +46,10 @@ public final class Config {
   //adding a USER_TTL that makes it usable in the UserCache
   public static long getUserTtl(){
     return USER_TTL;
+  }
+
+  public static String getEncryptionKey() {
+    return ENCRYPTION_KEY;
   }
 
   public static String getDatabaseHost() {
@@ -124,5 +129,6 @@ public final class Config {
     ORDER_TTL = json.get("ORDER_TTL").getAsLong();
     USER_TTL = json.get("USER_TTL").getAsLong();
     SALT_KEY = json.get("SALT_KEY").getAsString();
+    ENCRYPTION_KEY = json.get("ENCRYPTION_KEY").getAsString();
   }
 }
