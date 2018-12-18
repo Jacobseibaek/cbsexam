@@ -3,6 +3,7 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import model.Product;
 import utils.Log;
 
@@ -97,7 +98,7 @@ public class ProductController {
       dbCon = new DatabaseController();
     }
 
-    // TODO: Use caching layer.
+    // TODO: Use caching layer.(FIX, ligger i endpoint)
     String sql = "SELECT * FROM product";
 
     ResultSet rs = dbCon.query(sql);
@@ -119,6 +120,7 @@ public class ProductController {
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());
     }
+
 
     return products;
   }
