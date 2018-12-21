@@ -140,6 +140,7 @@ public class OrderController {
 
     Connection con = dbCon.getConnection();
     try {
+      //AutoCommit sættes til false, således der ikke commites noget forkert.
       con.setAutoCommit(false);
       // Insert the product in the DB
       int orderID = dbCon.insert(
@@ -176,6 +177,7 @@ public class OrderController {
     } catch (SQLException e) {
       System.out.println(e.getMessage());
       try {
+        //Der kaldes rollback for at gå tilbage til oprindelig version
         con.rollback();
         System.out.println("rollback");
       } catch (SQLException ex) {
