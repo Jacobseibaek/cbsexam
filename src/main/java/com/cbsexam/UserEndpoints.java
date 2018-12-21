@@ -1,6 +1,5 @@
 package com.cbsexam;
 
-import cache.ProductCache;
 import cache.UserCache;
 import com.google.gson.Gson;
 import controllers.UserController;
@@ -70,6 +69,8 @@ public class UserEndpoints {
     }
   }
 
+
+
   @POST
   @Path("/create")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -80,16 +81,16 @@ public class UserEndpoints {
 
     // Use the controller to add the user
     User createUser = UserController.createUser(newUser);
-
+    userCache.getUsers(true);
     // Get the user back with the added ID and return it to the user
     String json = new Gson().toJson(createUser);
-
     // Return the data to the user
     if (createUser != null) {
       // Return a response with status 200 and JSON as type
       return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
     } else {
       return Response.status(400).entity("Could not create user").build();
+
     }
   }
 
@@ -136,14 +137,12 @@ public class UserEndpoints {
 
 
     if (UserController.updateUser(user, user.getToken())) {
-      UserCache userCache = new UserCache();
       userCache.getUsers(true);
 
       // Return a response with status 200 and JSON as type
-      return Response.status(200).entity("User updated").build();
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("User updated").build();
     } else {
       return Response.status(400).entity("Could not update user").build();
     }
   }
 }
-

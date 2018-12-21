@@ -1,9 +1,7 @@
 package cache;
 
 import controllers.OrderController;
-import controllers.ProductController;
 import model.Order;
-import model.Product;
 import utils.Config;
 
 import java.util.ArrayList;

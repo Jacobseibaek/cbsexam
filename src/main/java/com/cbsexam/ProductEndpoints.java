@@ -59,7 +59,7 @@ public class ProductEndpoints {
   }
 
   @POST
-  @Path("/")
+  @Path("/create")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response createProduct(String body) {
 

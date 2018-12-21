@@ -58,7 +58,7 @@ public class OrderEndpoints {
   }
 
   @POST
-  @Path("/")
+  @Path("/create")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response createOrder(String body) {
 
@@ -78,7 +78,7 @@ public class OrderEndpoints {
     } else {
 
       // Return a response with status 400 and a message in text
-      return Response.status(400).entity("Could not create user").build();
+      return Response.status(400).entity("Could not create order").build();
     }
   }
 }

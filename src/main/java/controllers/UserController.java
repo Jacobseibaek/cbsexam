@@ -177,51 +177,58 @@ public class UserController {
 
   public static String loginUser(User user) {
 
-    String token = null;
-    User userlogin;
     // Check for DB Connection
     if (dbCon == null) {
       dbCon = new DatabaseController();
     }
-    String sql = "SELECT * FROM user where email=" + user.getEmail() + "'AND password='" + user.getPassword() + "'";
+
+    String sql = "SELECT * FROM user where email='" + user.getEmail() + "'AND password ='" + user.getPassword() + "'";
 
     dbCon.insert(sql);
 
-    ResultSet rs = dbCon.query(sql);
+    // Actually do the query
+    ResultSet resultSet = dbCon.query(sql);
 
+    //deklerer den uden nogen værdi
+
+    User userLogin;
+    String token = null;
 
     try {
-      if (rs.next()) {
-        userlogin =
+      // Get first object, since we only have one
+      if (resultSet.next()) {
+        userLogin =
                 new User(
-                        rs.getInt("id"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        rs.getString("password"),
-                        rs.getString("email")
-                        );
+                        resultSet.getInt("id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("password"),
+                        resultSet.getString("email"));
 
-        if (userlogin != null) {
+        if (userLogin != null) {
           try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
             token = JWT.create()
-                    .withClaim("userid", userlogin.getId())
+                    .withClaim("userid", userLogin.getId())
                     .withIssuer("auth0")
                     .sign(algorithm);
-          } catch (JWTCreationException e) {
-            System.out.println(e.getMessage());
+          } catch (JWTCreationException exception) {
+            //Invalid Signing configuration / Couldn't convert Claims.
+            System.out.println(exception.getMessage());
           } finally {
-            return token;
+            return token ;
           }
         }
       } else {
-        System.out.println("User not found");
+        System.out.println("No user found");
       }
-    } catch (SQLException ex) {
-      System.out.println(ex.getMessage());
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
     }
-  return null;
-}
+
+    // Return null
+    return "";
+  }
 public static boolean deleteUser(String token) {
 
   DecodedJWT jwt = null;
